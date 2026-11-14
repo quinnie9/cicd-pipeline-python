@@ -3,16 +3,20 @@
 # IMPORTANTE: reemplaza ??? con los nombres completos de los 3 integrantes,
 # separados por " | " y en el mismo orden de la sección Integrantes del README.
 # Ejemplo: "Ana María Pérez | Luis Andrés Gómez | Sara Restrepo Ríos"
-AUTOR = "???"
+AUTOR = "Quinnie Villarreal | Lina Ballesteros | Alejandro Rios"
+
 
 def sumar(a, b):
     return a + b
 
+
 def restar(a, b):
     return a - b
 
+
 def multiplicar(a, b):
     return a * b
+
 
 def dividir(a, b):
     if b == 0:
