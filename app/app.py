@@ -1,9 +1,16 @@
 """Aplicación web de la calculadora del taller."""
 
+import os
+import secrets
+
 from flask import Flask, render_template, request
+from flask_wtf.csrf import CSRFProtect
 from .calculadora import sumar, restar, multiplicar, dividir
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY") or secrets.token_hex(32)
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+csrf = CSRFProtect(app)
 
 
 @app.route("/", methods=["GET", "POST"])

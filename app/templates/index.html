@@ -7,6 +7,7 @@
 <body>
     <h1>Calculadora</h1>
     <form method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <label for="num1">Número 1</label>
         <input id="num1" type="text" name="num1" placeholder="Número 1" required>
         <label for="num2">Número 2</label>

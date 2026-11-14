@@ -6,11 +6,14 @@ FROM python:3.13-slim
 WORKDIR /app
 
 # Copia solo el archivo de requerimientos primero para aprovechar el cache de Docker
-COPY requirements.txt .
+COPY requirements.lock .
 
 # Instala solo las dependencias de ejecución (Flask y Gunicorn)
 # Usa --no-cache-dir para reducir el tamaño de la imagen
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --only-binary=:all: --require-hashes -r requirements.lock
+
+# Ejecuta la aplicación con una cuenta sin privilegios.
+RUN groupadd --system calculadora && useradd --system --gid calculadora calculadora
 
 # Copia el código de la aplicación (solo la carpeta app)
 COPY app/ ./app/
@@ -19,8 +22,10 @@ COPY app/ ./app/
 # Gunicorn por defecto usa 8000, así que usaremos ese.
 EXPOSE 8000
 
+USER calculadora
+
 # Comando para ejecutar la aplicación usando Gunicorn cuando el contenedor inicie
 # 'app.app:app' significa: del archivo app.py dentro del paquete app, usa la instancia 'app' de Flask.
 # 'workers=4' es un ejemplo, ajusta según sea necesario.
 # 'bind 0.0.0.0:8000' hace que Gunicorn escuche en todas las interfaces de red en el puerto 8000.
-CMD ["gunicorn", "--workers=4", "--bind=0.0.0.0:8000", "app.app:app"]
+CMD ["gunicorn", "--preload", "--workers=4", "--bind=0.0.0.0:8000", "app.app:app"]
